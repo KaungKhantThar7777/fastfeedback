@@ -1,3 +1,4 @@
+import { useAuth } from "@/lib/auth";
 import { createSite } from "@/lib/db";
 import {
   Modal,
@@ -15,28 +16,45 @@ import {
   useToast,
 } from "@chakra-ui/core";
 import { useForm } from "react-hook-form";
+import { mutate } from "swr";
 
-function AddSiteModal() {
+function AddSiteModal({ text }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { handleSubmit, register } = useForm();
   const initialRef = React.useRef();
   const toast = useToast();
+  const { user } = useAuth();
 
-  const onCreateSite = (values) => {
-    createSite(values);
+  const onCreateSite = ({ name, url }) => {
+    const newSite = { authorId: user.uid, createdAt: new Date().toISOString(), name, url };
+    createSite(newSite);
     toast({
-      title: "Sites added.",
-      description: "Successfully created website link.",
+      title: "Success!",
+      description: "We've added your site.",
       status: "success",
-      duration: 6000,
+      duration: 5000,
       isClosable: true,
     });
+    mutate(
+      "/api/sites",
+      (data) => {
+        return { sites: [...data.sites, newSite] };
+      },
+      false
+    );
     onClose();
   };
   return (
     <>
-      <Button fontWeight="medium" onClick={onOpen}>
-        Add Your First Site
+      <Button
+        onClick={onOpen}
+        backgroundColor="gray.900"
+        color="white"
+        fontWeight="medium"
+        _hover={{ bg: "gray.700" }}
+        _active={{ bg: "gray.800", transform: "scale(0.95)" }}
+      >
+        {text}
       </Button>
 
       <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
@@ -50,7 +68,7 @@ function AddSiteModal() {
               <Input
                 ref={initialRef}
                 placeholder="Website Name"
-                name="site"
+                name="name"
                 ref={register({
                   required: true,
                 })}

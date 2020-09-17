@@ -13,10 +13,10 @@ import {
   Button,
 } from "@chakra-ui/core";
 import { useAuth } from "@/lib/auth";
+import AddSiteModal from "./AddSiteModa";
 
 const DashboardShell = ({ children }) => {
   const { user } = useAuth();
-  console.log({ user });
 
   return (
     <Flex flexDirection="column" height="100vh">
@@ -28,29 +28,33 @@ const DashboardShell = ({ children }) => {
         </Stack>
         <Flex alignItems="center" justifyContent="space-around">
           <Link mr={4}>Account</Link>
-          <Avatar size="sm" src={user.photoUrl} />
+          <Avatar size="sm" src={user?.photoUrl} />
         </Flex>
       </Flex>
       <Flex backgroundColor="blackAlpha.50" height="100%" overflow="visible">
         <Flex
           justifyContent="flex-start"
+          direction="column"
           alignItems="stretch"
           ml="auto"
           mr="auto"
           maxWidth="1000px"
           width="100%"
         >
-          <Breadcrumb py={12} width="100%">
+          <Breadcrumb pt={12} width="100%">
             <BreadcrumbItem isCurrentPage>
               <BreadcrumbLink color="gray.700" fontWeight="400" fontSize="sm">
                 Sites
               </BreadcrumbLink>
             </BreadcrumbItem>
+          </Breadcrumb>
+          <Flex justifyContent="space-between">
             <Heading mt={2} mb={6}>
               My Sites
             </Heading>
-            {children}
-          </Breadcrumb>
+            <AddSiteModal text="+ Add Site" />
+          </Flex>
+          {children}
         </Flex>
       </Flex>
     </Flex>

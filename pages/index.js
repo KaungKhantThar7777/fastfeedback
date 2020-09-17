@@ -1,4 +1,5 @@
 import { Button, Code, Flex, Heading, Icon, Text } from "@chakra-ui/core";
+import Link from "next/link";
 import Head from "next/head";
 import { useAuth } from "@/lib/auth";
 
@@ -12,7 +13,11 @@ export default function Home() {
 
       <Icon name="logo" color="black" size="64px" />
       {user ? (
-        <Button onClick={() => signout()}>Sign out</Button>
+        <Button>
+          <Link href="/dashboard">
+            <a>View Dashboard</a>
+          </Link>
+        </Button>
       ) : (
         <Button mt={4} size="sm" onClick={() => signInWithGithub()}>
           Sign in
