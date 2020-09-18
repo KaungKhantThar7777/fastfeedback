@@ -1,17 +1,11 @@
+import { getAllSites } from "@/lib/db-admin";
 import db from "@/lib/firebase-admin";
 
 export default async (_, res) => {
-  const sitesRef = db.collection("sites");
-  const snapshot = await sitesRef.get();
-  if (snapshot.empty) {
-    console.log("No Sites.");
-    return res.status(200).json({ sites: [] });
+  const { sites, error } = await getAllSites();
+
+  if (error) {
+    res.status(500).json({ error });
   }
-
-  const sites = [];
-  snapshot.forEach((doc) => {
-    sites.push({ id: doc.id, ...doc.data() });
-  });
-
   res.status(200).json({ sites });
 };
