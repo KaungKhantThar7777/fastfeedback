@@ -14,6 +14,7 @@ export async function getStaticProps(context) {
     props: {
       initialFeedback: feedback,
     },
+    revalidate: 1,
   };
 }
 
@@ -24,7 +25,6 @@ export async function getStaticPaths() {
     params: {
       siteId: site.id.toString(),
     },
-    revalidate: 1,
   }));
   return {
     paths,
