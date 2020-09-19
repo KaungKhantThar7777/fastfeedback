@@ -33,12 +33,13 @@ export async function getStaticPaths() {
 }
 
 const SiteFeedback = ({ initialFeedback }) => {
+  console.log({ initialFeedback });
   const [allFeedbacks, setAllFeedbacks] = useState(initialFeedback);
   const { user } = useAuth();
   const router = useRouter();
   const inputRef = useRef(null);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     const newFeedback = {
@@ -51,8 +52,9 @@ const SiteFeedback = ({ initialFeedback }) => {
       text: inputRef.current.value,
     };
 
-    setAllFeedbacks([newFeedback, ...allFeedbacks]);
-    createFeedback(newFeedback);
+    const res = await createFeedback(newFeedback);
+    setAllFeedbacks([{ id: res.id, ...newFeedback }, ...allFeedbacks]);
+    inputRef.current.value = "";
   }
   return (
     <Box display="flex" flexDirection="column" width="full" maxWidth="700px" margin="0 auto">

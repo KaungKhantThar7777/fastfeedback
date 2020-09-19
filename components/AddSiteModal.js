@@ -38,7 +38,7 @@ function AddSiteModal({ text }) {
     mutate(
       ["/api/sites", user.token],
       (data) => {
-        return { sites: [...data.sites, newSite] };
+        return { sites: data.sites ? [...data.sites, newSite] : [newSite] };
       },
       false
     );

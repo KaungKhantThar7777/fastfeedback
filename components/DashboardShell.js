@@ -11,19 +11,26 @@ import {
   Heading,
   Button,
 } from "@chakra-ui/core";
+import NextLink from "next/link";
 import { useAuth } from "@/lib/auth";
-import AddSiteModal from "./AddSiteModa";
+import AddSiteModal from "./AddSiteModal";
 
-const DashboardShell = ({ children }) => {
+const DashboardShell = ({ sites, children }) => {
   const { user, signout } = useAuth();
 
   return (
     <Flex flexDirection="column" height="100vh">
       <Flex justifyContent="space-between" backgroundColor="white" py={5} px={8}>
         <Stack isInline spacing={4} align="center">
-          <Icon name="logo" color="black" />
-          <Link>Feedback</Link>
-          <Link>Sites</Link>
+          <NextLink href="/" passHref>
+            <Icon name="logo" color="black" size="24px" mr={8} />
+          </NextLink>
+          <NextLink href="/dashboard" passHref>
+            <Link mr={4}>Sites</Link>
+          </NextLink>
+          <NextLink href="/feedback" passHref>
+            <Link mr={4}>Feedback</Link>
+          </NextLink>
         </Stack>
         <Flex alignItems="center" justifyContent="space-around">
           <Button onClick={signout} mr={4}>
@@ -45,15 +52,15 @@ const DashboardShell = ({ children }) => {
           <Breadcrumb pt={12} width="100%">
             <BreadcrumbItem isCurrentPage>
               <BreadcrumbLink color="gray.700" fontWeight="400" fontSize="sm">
-                Sites
+                {sites ? "Sites" : "Feedback"}
               </BreadcrumbLink>
             </BreadcrumbItem>
           </Breadcrumb>
           <Flex justifyContent="space-between">
             <Heading mt={2} mb={6}>
-              My Sites
+              {sites ? "My Sites" : "My Feedback"}
             </Heading>
-            <AddSiteModal text="+ Add Site" />
+            {sites ? <AddSiteModal text="+ Add Site" /> : null}
           </Flex>
           {children}
         </Flex>
