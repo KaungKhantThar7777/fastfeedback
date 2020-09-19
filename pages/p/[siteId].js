@@ -1,9 +1,10 @@
-import Feedback from "@/components/Feedback";
+import { useRef, useState } from "react";
 import { useRouter } from "next/router";
+import { Box, FormControl, FormLabel, Input, Button } from "@chakra-ui/core";
+
+import Feedback from "@/components/Feedback";
 import { useAuth } from "@/lib/auth";
 import { getAllFeedback, getAllSites } from "@/lib/db-admin";
-import { Box, FormControl, FormLabel, Input, Button } from "@chakra-ui/core";
-import { useRef, useState } from "react";
 import { createFeedback } from "@/lib/db";
 
 export async function getStaticProps(context) {
@@ -18,11 +19,12 @@ export async function getStaticProps(context) {
 
 export async function getStaticPaths() {
   const { sites } = await getAllSites();
-  console.log({ sites });
+
   const paths = sites.map((site) => ({
     params: {
       siteId: site.id.toString(),
     },
+    revalidate: 1,
   }));
   return {
     paths,

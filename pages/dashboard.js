@@ -9,7 +9,7 @@ import SiteTable from "@/components/SiteTable";
 export default function Home() {
   const { user } = useAuth();
 
-  const { data } = useSWR("/api/sites", fetcher);
+  const { data } = useSWR(user ? ["/api/sites", user.token] : null, fetcher);
 
   if (!data) {
     return (
@@ -19,7 +19,6 @@ export default function Home() {
     );
   }
 
-  console.log({ data });
   return (
     <DashboardShell>
       {data.sites.length > 0 ? <SiteTable sites={data.sites} /> : <EmptyState />}

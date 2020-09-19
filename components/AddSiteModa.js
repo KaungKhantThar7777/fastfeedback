@@ -36,7 +36,7 @@ function AddSiteModal({ text }) {
       isClosable: true,
     });
     mutate(
-      "/api/sites",
+      ["/api/sites", user.token],
       (data) => {
         return { sites: [...data.sites, newSite] };
       },
